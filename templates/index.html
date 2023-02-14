@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ImagePreprocessing</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script type="text/javascript">
+    //페이지가 로드되면 실행한다.
+    $(document).ready( function() {
+        $("#view").load("view.html");
+    });
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="item">
+            <h1>이미지 전처리</h1>
+        </div>
+
+        <div class="item">
+            <h1>이미지 컨트롤 슬라이드 바</h1>
+        </div>
+
+        <div class="item">
+            <h2>이미지 불러오기</h2>
+            <!--
+            <p>
+                <form action="/file_upload" method="POST" enctype="multipart/form-data">
+                    <p>
+                    <input type="file" name="file" accept="image/*" required>
+                    </p>
+                    <p>
+                    <input type="submit" value="입력">
+                    </p>
+                </form>
+            </p>
+            -->
+            <p><input type="file" id="myFile" name="myFile"></p>
+            <p><button onclick="uploadImage()"> 입력 </button></p>
+            <h2>전처리 기법 선택</h2>
+            <p>
+                <form action="/test" method="POST" style="display:inline">
+                    <button type="submit", value="Button"> 노말라이즈 </button>
+                </form>
+                &nbsp;
+                <form action="/test" method="POST" style="display:inline">
+                    <button type="submit", value="Button"> 바이너리 </button>
+                </form>
+            </p>
+            <p>
+                <form action="/test" method="POST" style="display:inline">
+                    <button type="submit", value="Button"> 뭐하지 </button>
+                </form>
+                &nbsp;
+                <form action="/test" method="POST" style="display:inline">
+                    <button type="submit", value="Button"> 캐니 </button>
+                </form>
+            </p>
+        </div>
+
+        <div class="item">
+            <div id="view">
+                <!-- 여기에 view.html이 로드 -->
+            </div>
+            <!--{% if True %}
+            <div>
+                <img src="{{image_file}}" style="max-width:100%; height:auto;"/>
+            </div>
+            {% endif %}
+            -->
+            <!--
+                <img id="uploadedImage" src="#" alt="이미지 설명" style="max-width:100%; height:auto;">
+            -->
+        </div>
+
+    </div>
+</body>
+
+</html>
