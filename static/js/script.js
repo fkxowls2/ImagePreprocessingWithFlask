@@ -18,3 +18,20 @@ function uploadImage() {
     // 이미지 파일 읽기 시작
     reader.readAsDataURL(file);
 }
+
+function test() {
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("value");
+    output.innerHTML = slider.value;
+    
+    slider.oninput = function() {
+        output.innerHTML = this.value;
+    }
+}
+
+function form_action() {
+  var form = document.getElementById("form");
+  //form.action = "/";
+  //form.method = "GET";
+  form.submit();
+}
