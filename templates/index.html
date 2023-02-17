@@ -6,79 +6,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ImagePreprocessing</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    <script type="text/javascript">
-    //페이지가 로드되면 실행한다.
-    $(document).ready( function() {
-        $("#view").load("view.html");
-    });
-    </script>
 </head>
 
 <body>
     <div class="container">
-        <div class="item">
+        <div class="item" id="child1">
             <h1>이미지 전처리</h1>
         </div>
 
-        <div class="item">
-            <h1>이미지 컨트롤 슬라이드 바</h1>
+        <div class="item" id="child2">
+            <p><h2>{{preprocessingMethod}}</h2></p>
+            <p id="slideSector" style="{{slideDisplay}}">
+                <input id="slider" type="range" min="1" max="255" step="1" value="{{slideValue}}">
+                Value: <span id="sliderValue">{{slideValue}}</span>
+                <br><br>
+            </p>
         </div>
 
-        <div class="item">
-            <h2>이미지 불러오기</h2>
-            <!--
+        <div class="item" id="child3">
+            <p><h2>이미지 불러오기</h2></p>
+            <p><form action="/file_upload" method="POST" enctype="multipart/form-data">
+                <p><input type="file" name="file" accept="image/*" required></p>
+                <p><input type="submit" value="입력"></p>
+                </form></p>
+            <p><h2>전처리 기법 선택</h2></p>
             <p>
-                <form action="/file_upload" method="POST" enctype="multipart/form-data">
-                    <p>
-                    <input type="file" name="file" accept="image/*" required>
-                    </p>
-                    <p>
-                    <input type="submit" value="입력">
-                    </p>
-                </form>
-            </p>
-            -->
-            <p><input type="file" id="myFile" name="myFile"></p>
-            <p><button onclick="uploadImage()"> 입력 </button></p>
-            <h2>전처리 기법 선택</h2>
-            <p>
-                <form action="/test" method="POST" style="display:inline">
-                    <button type="submit", value="Button"> 노말라이즈 </button>
+                <form action="/color_to_gray" method="POST" style="display:inline">
+                    <button type="submit" value="Button" onclick="hidden_slide()"> 흑백 이미지 </button>
                 </form>
                 &nbsp;
-                <form action="/test" method="POST" style="display:inline">
-                    <button type="submit", value="Button"> 바이너리 </button>
-                </form>
-            </p>
-            <p>
-                <form action="/test" method="POST" style="display:inline">
-                    <button type="submit", value="Button"> 뭐하지 </button>
-                </form>
-                &nbsp;
-                <form action="/test" method="POST" style="display:inline">
-                    <button type="submit", value="Button"> 캐니 </button>
+                <form action="/make_binary" method="POST" style="display:inline">
+                    <button type="submit" value="Button"> 바이너리 </button>
                 </form>
             </p>
         </div>
 
-        <div class="item">
-            <div id="view">
-                <!-- 여기에 view.html이 로드 -->
-            </div>
-            <!--{% if True %}
-            <div>
-                <img src="{{image_file}}" style="max-width:100%; height:auto;"/>
-            </div>
-            {% endif %}
-            -->
-            <!--
-                <img id="uploadedImage" src="#" alt="이미지 설명" style="max-width:100%; height:auto;">
-            -->
+        <div class="item" id="child4">
+            <table>
+                <tr>
+                    <td><img src="{{originalImagePath}}" alt="원본 이미지" style="max-width:100%; height:auto;"></td>
+                    <td><img id="preprocessingImage" src="{{preprocessingImagePath}}" alt="전처리 이미지" style="max-width:100%; height:auto;"></td>
+                </tr>
+            </table>
         </div>
 
     </div>
 </body>
+
+<script>
+    slide_event_handler();
+</script>
 
 </html>
