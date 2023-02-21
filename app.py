@@ -4,6 +4,8 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 import shutil
 import cv2
+import numpy as np
+from utils import function_binary, function_normalize
 
 
 
@@ -11,15 +13,17 @@ app = Flask(__name__)
 CORS(app)
 
 originalSavePath = './static/img/original.png'
+preporcessingInitSavePath = './static/img/init_preprocessing.png'
 preporcessingSavePath = './static/img/preprocessing.png'
-preprocessingMethod = "전처리 기법을 선택해 주세요"
-slideDisplay = "display:none"
+binaryValue = 127
+normalizeValue = 1
 
 
 @app.route('/')
 def index():
-    return render_template('index.html', preprocessingMethod=preprocessingMethod, slideDisplay=slideDisplay)
-
+    global binaryValue, normalizeValue
+    binaryValue, normalizeValue = 127, 1
+    return render_template('index.html')
 
 @app.route('/file_upload', methods=['GET', 'POST'])
 def file_upload():
@@ -27,45 +31,51 @@ def file_upload():
         f = request.files['file']
         # img = Image.open(f)
         f.save(originalSavePath)
+        shutil.copy(originalSavePath, preporcessingInitSavePath)
         shutil.copy(originalSavePath, preporcessingSavePath)
         
-    return render_template('index.html', preprocessingMethod=preprocessingMethod, originalImagePath=originalSavePath,
-                           slideDisplay=slideDisplay)
+    return render_template('upload.html', originalImagePath=originalSavePath)
 
+@app.route('/load_original', methods=['POST'])
+def load_original():
+    _ = str(request.form['value'])
+    shutil.copy(originalSavePath, preporcessingInitSavePath)
+    shutil.copy(originalSavePath, preporcessingSavePath)
+    return ""
 
 @app.route('/color_to_gray', methods=['GET', 'POST'])
 def color_to_gray():
-    slideDisplay = "display:none"
     if request.method == 'POST':
-        preprocessingMethod = "흑백 이미지 만들기"
-        img = cv2.imread(originalSavePath, cv2.IMREAD_GRAYSCALE)
+        shutil.copy(preporcessingSavePath, preporcessingInitSavePath)
+        img = cv2.imread(preporcessingInitSavePath, cv2.IMREAD_GRAYSCALE)
         cv2.imwrite(preporcessingSavePath, img)
         
-    return render_template('index.html', preprocessingMethod=preprocessingMethod, originalImagePath=originalSavePath,
-                           preprocessingImagePath=preporcessingSavePath, slideDisplay=slideDisplay)
-
+    return render_template('gray.html', originalImagePath=preporcessingInitSavePath, preprocessingImagePath=preporcessingSavePath)
 
 @app.route('/make_binary', methods=['GET', 'POST'])
 def make_binary():
-    defaultSlideValue = 127
     if request.method == 'POST':
-        preprocessingMethod = "바이너리로 만들기"
-        img = cv2.imread(originalSavePath, cv2.IMREAD_GRAYSCALE)
-        _, img = cv2.threshold(img, defaultSlideValue, 255, cv2.THRESH_BINARY)
-        cv2.imwrite(preporcessingSavePath, img)
+        shutil.copy(preporcessingSavePath, preporcessingInitSavePath)
+        function_binary(preporcessingInitSavePath, binaryValue, preporcessingSavePath)
         
-    return render_template('index.html', preprocessingMethod=preprocessingMethod, originalImagePath=originalSavePath, 
-                           preprocessingImagePath=preporcessingSavePath, slideValue=defaultSlideValue)   
-
+    return render_template('binary.html', originalImagePath=preporcessingInitSavePath, preprocessingImagePath=preporcessingSavePath,
+                           binaryValue=binaryValue)   
 
 @app.route('/slide_binary', methods=['POST'])
 def slide_binary():
-    slideValue = int(request.form['value'])
-    img = cv2.imread(originalSavePath, cv2.IMREAD_GRAYSCALE)
-    _, img = cv2.threshold(img, slideValue, 255, cv2.THRESH_BINARY)
-    cv2.imwrite(preporcessingSavePath, img)
+    global binaryValue
+    binaryValue = int(request.form['value'])
+    function_binary(preporcessingInitSavePath, binaryValue, preporcessingSavePath)
     return ""
 
+@app.route('/make_normalize', methods=['GET', 'POST'])
+def make_normalize():
+    if request.method == 'POST':
+        shutil.copy(preporcessingSavePath, preporcessingInitSavePath)
+        function_normalize(preporcessingInitSavePath, preporcessingSavePath)
+
+    return render_template('normalize.html', originalImagePath=preporcessingInitSavePath, preprocessingImagePath=preporcessingSavePath)
+    
     
     
 if __name__ == '__main__':

@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ImagePreprocessing</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </head>
 
 <body>
@@ -15,34 +14,16 @@
             <h1>이미지 전처리</h1>
         </div>
 
-        <div class="item">
-            <input type="range" min="1" max="100" value="50" class="slider" id="myRange" onchange=form_action()>
-            <p>Value: <span id="value"></span></p>
         <div class="item" id="child2">
-            <p><h2>{{preprocessingMethod}}</h2></p>
-            <p id="slideSector" style="{{slideDisplay}}">
-                <input id="slider" type="range" min="1" max="255" step="1" value="{{slideValue}}">
-                Value: <span id="sliderValue">{{slideValue}}</span>
-                <br><br>
-            </p>
+            <p><h2>이미지를 업로드 해주세요</h2></p>
         </div>
 
         <div class="item" id="child3">
             <p><h2>이미지 불러오기</h2></p>
             <p><form action="/file_upload" method="POST" enctype="multipart/form-data">
                 <p><input type="file" name="file" accept="image/*" required></p>
-                <p><input type="submit" value="입력"></p>
+                <p><input type="submit" value="    입력    "></p>
                 </form></p>
-            <p><h2>전처리 기법 선택</h2></p>
-            <p>
-                <form action="/color_to_gray" method="POST" style="display:inline">
-                    <button type="submit" value="Button" onclick="hidden_slide()"> 흑백 이미지 </button>
-                </form>
-                &nbsp;
-                <form action="/make_binary" method="POST" style="display:inline">
-                    <button type="submit" value="Button"> 바이너리 </button>
-                </form>
-            </p>
         </div>
 
         <div class="item" id="child4">
@@ -55,20 +36,10 @@
         </div>
 
     </div>
-
-    <script>
-        //var slider = document.getElementById("myRange");
-        //var output = document.getElementById("value");
-        //output.innerHTML = slider.value;
-        
-        //slider.oninput = function() {
-        //    output.innerHTML = this.value;
-        //}
-    </script>
 </body>
 
 <script>
-    slide_event_handler();
+
 </script>
 
 </html>
