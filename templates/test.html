@@ -1,14 +1,12 @@
 {% extends "index.html" %}
-
 {% block child2 %}
 <p><h2>전처리 : 바이너리(Threshold)</h2></p>
 <p>
     <input id="slider" type="range" min="1" max="255" step="1" value="{{binaryValue}}">
-    Threshold Value: <span id="sliderValue">{{binaryValue}}</span>
+    Value: <span id="sliderValue">{{binaryValue}}</span>
     <br><br>
 </p>
 {% endblock %}
-
-{% block script %}
-binary_slide_event();
+{% block child3 %}
+<button onclick="load_original_image()">&nbsp;&nbsp;&nbsp;&nbsp;리셋&nbsp;&nbsp;&nbsp;&nbsp;</button>
 {% endblock %}

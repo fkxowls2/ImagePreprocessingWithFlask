@@ -1,14 +1,5 @@
-function reload_preprocessing_image() {
-  let imgElement = document.getElementById("preprocessingImage");
-  let src = imgElement.getAttribute("src");
-  // 매개변수를 추가하여 URL을 변경합니다.
-  //src = src + "?time=" + new Date().getTime();
-  src = src + "?1"
-  imgElement.setAttribute("src", src);
-}
-
-function reload_original_image() {
-  let imgElement = document.getElementById("originalImage");
+function reload_image(elementId) {
+  let imgElement = document.getElementById(elementId);
   let src = imgElement.getAttribute("src");
   // 매개변수를 추가하여 URL을 변경합니다.
   //src = src + "?time=" + new Date().getTime();
@@ -24,8 +15,8 @@ function load_original_image() {
     xhr.send("value=" + this.value);
     xhr.onreadystatechange = function() {
       if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-        reload_original_image();
-        reload_preprocessing_image();
+        reload_image("originalImage");
+        reload_image("preprocessingImage");
       }
   }
 }
@@ -51,7 +42,7 @@ function binary_slide_event() {
     // 서버에서 반환한 이미지 업데이트
     xhr.onreadystatechange = function() {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-          reload_preprocessing_image();
+          reload_image("preprocessingImage");
         }
     }
     // 슬라이더 값을 출력

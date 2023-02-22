@@ -1,11 +1,9 @@
 from flask import Flask, render_template, request, redirect
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
-from PIL import Image
 import shutil
 import cv2
-import numpy as np
-from utils import function_binary, function_normalize
+from utils import function_binary, function_normalize, function_adthreshold
 
 
 
@@ -17,12 +15,13 @@ preporcessingInitSavePath = './static/img/init_preprocessing.png'
 preporcessingSavePath = './static/img/preprocessing.png'
 binaryValue = 127
 normalizeValue = 1
+adThresholdValue = 15
 
 
 @app.route('/')
 def index():
-    global binaryValue, normalizeValue
-    binaryValue, normalizeValue = 127, 1
+    global binaryValue, normalizeValue, adThresholdValue
+    binaryValue, normalizeValue, adThresholdValue = 127, 1, 15
     return render_template('index.html')
 
 @app.route('/file_upload', methods=['GET', 'POST'])
@@ -75,6 +74,15 @@ def make_normalize():
         function_normalize(preporcessingInitSavePath, preporcessingSavePath)
 
     return render_template('normalize.html', originalImagePath=preporcessingInitSavePath, preprocessingImagePath=preporcessingSavePath)
+
+@app.route('/make_adthreshold', methods=['GET', 'POST'])
+def make_adthreshold():
+    if request.method == 'POST':
+        shutil.copy(preporcessingSavePath, preporcessingInitSavePath)
+        function_adthreshold(preporcessingInitSavePath, adThresholdValue, preporcessingSavePath)
+
+    return render_template('adthreshold.html', originalImagePath=preporcessingInitSavePath, preprocessingImagePath=preporcessingSavePath)    
+    
     
     
     

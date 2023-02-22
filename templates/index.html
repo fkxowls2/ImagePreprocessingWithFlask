@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ImagePreprocessing</title>
+    <title>Image Preprocessing</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </head>
 
 <body>
@@ -13,33 +14,56 @@
         <div class="item" id="child1">
             <h1>이미지 전처리</h1>
         </div>
-
         <div class="item" id="child2">
+            {% block child2 %}
             <p><h2>이미지를 업로드 해주세요</h2></p>
+            {% endblock %}
         </div>
 
         <div class="item" id="child3">
             <p><h2>이미지 불러오기</h2></p>
-            <p><form action="/file_upload" method="POST" enctype="multipart/form-data">
-                <p><input type="file" name="file" accept="image/*" required></p>
-                <p><input type="submit" value="    입력    "></p>
-                </form></p>
+            <p>
+                <form action="/file_upload" method="POST" enctype="multipart/form-data">
+                    <p><input type="file" name="file" accept="image/*" required></p>
+                    <p><input type="submit" value="    입력    "></p>
+                </form>
+                <button onclick="load_original_image()">&nbsp;&nbsp;&nbsp;&nbsp;리셋&nbsp;&nbsp;&nbsp;&nbsp;</button>
+            </p>
+            <p><h2>전처리 기법 선택</h2></p>
+            <p>
+                <form action="/color_to_gray" method="POST" style="display:inline">
+                    <button type="submit" value="Button"> 흑백 이미지 </button>
+                </form>
+                &nbsp;
+                <form action="/make_binary" method="POST" style="display:inline">
+                    <button type="submit" value="Button"> 바이너리 </button>
+                </form>
+            </p>
+            <p>
+                <form action="/make_normalize" method="POST" style="display:inline">
+                    <button type="submit" value="Button"> 커스텀 노멀라이즈 </button>
+                </form>
+                &nbsp;
+                <form action="/make_adthreshold" method="POST" style="display:inline">
+                    <button type="submit" value="Button"> ad스레스홀드 </button>
+                </form>
+            </p>
         </div>
 
         <div class="item" id="child4">
             <table>
                 <tr>
-                    <td><img src="{{originalImagePath}}" alt="원본 이미지" style="max-width:100%; height:auto;"></td>
+                    <td><img id="originalImage" src="{{originalImagePath}}" alt="원본 이미지" style="max-width:100%; height:auto;"></td>
                     <td><img id="preprocessingImage" src="{{preprocessingImagePath}}" alt="전처리 이미지" style="max-width:100%; height:auto;"></td>
                 </tr>
             </table>
         </div>
 
     </div>
+    <script>
+        {% block script %}
+        {% endblock %}
+    </script>
 </body>
-
-<script>
-
-</script>
 
 </html>

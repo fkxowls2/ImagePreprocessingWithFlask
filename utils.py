@@ -4,7 +4,7 @@ import numpy as np
 
 
 def function_binary(imagePath, inputValue, savePath):
-    img = cv2.imread(imagePath)
+    img = cv2.imread(imagePath, cv2.IMREAD_GRAYSCALE)
     _, img = cv2.threshold(img, inputValue, 255, cv2.THRESH_BINARY)
     cv2.imwrite(savePath, img)
     
@@ -24,3 +24,8 @@ def function_normalize(imagePath, savePath):
     ).astype(np.uint8)
     
     cv2.imwrite(savePath, zscore_scaled)
+    
+def function_adthreshold(imagePath, inputValue, savePath):
+    img = cv2.imread(imagePath, cv2.IMREAD_GRAYSCALE)
+    img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, inputValue, 2)
+    cv2.imwrite(savePath, img)
