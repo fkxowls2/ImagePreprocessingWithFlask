@@ -13,7 +13,11 @@
     <div class="container">
         <div class="item" id="child1">
             <h1>이미지 전처리</h1>
+            <form action="/" style="display:inline">
+                <button type="submit" value="Button"> 홈으로 </button>
+            </form>
         </div>
+
         <div class="item" id="child2">
             {% block child2 %}
             <p><h2>이미지를 업로드 해주세요</h2></p>
@@ -27,16 +31,21 @@
                     <p><input type="file" name="file" accept="image/*" required></p>
                     <p><input type="submit" value="    입력    "></p>
                 </form>
-                <button onclick="load_original_image()">&nbsp;&nbsp;&nbsp;&nbsp;리셋&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                <button onclick="load_original_image()">이미지 리셋</button>
             </p>
             <p><h2>전처리 기법 선택</h2></p>
             <p>
                 <form action="/color_to_gray" method="POST" style="display:inline">
                     <button type="submit" value="Button"> 흑백 이미지 </button>
                 </form>
-                &nbsp;
+            </p>
+            <p>
                 <form action="/make_binary" method="POST" style="display:inline">
                     <button type="submit" value="Button"> 바이너리 </button>
+                </form>
+                &nbsp;
+                <form action="/make_adthreshold" method="POST" style="display:inline">
+                    <button type="submit" value="Button"> Adapt스레스홀드 </button>
                 </form>
             </p>
             <p>
@@ -44,8 +53,17 @@
                     <button type="submit" value="Button"> 커스텀 노멀라이즈 </button>
                 </form>
                 &nbsp;
-                <form action="/make_adthreshold" method="POST" style="display:inline">
-                    <button type="submit" value="Button"> ad스레스홀드 </button>
+                <form action="/make_blob" method="POST" style="display:inline">
+                    <button type="submit" value="Button"> 블랍 </button>
+                </form>
+            </p>
+            <p>
+                <form action="/make_blur" method="POST" style="display:inline">
+                    <button type="submit" value="Button"> 가우시안 블러 </button>
+                </form>
+                &nbsp;
+                <form action="/make_blob" method="POST" style="display:inline">
+                    <button type="submit" value="Button"> 히스토그램작업중 </button>
                 </form>
             </p>
         </div>

@@ -8,6 +8,7 @@ def function_binary(imagePath, inputValue, savePath):
     _, img = cv2.threshold(img, inputValue, 255, cv2.THRESH_BINARY)
     cv2.imwrite(savePath, img)
     
+    
 def function_normalize(imagePath, savePath):
     img = cv2.imread(imagePath, cv2.IMREAD_GRAYSCALE)
     
@@ -25,7 +26,27 @@ def function_normalize(imagePath, savePath):
     
     cv2.imwrite(savePath, zscore_scaled)
     
+    
 def function_adthreshold(imagePath, inputValue, savePath):
     img = cv2.imread(imagePath, cv2.IMREAD_GRAYSCALE)
     img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, inputValue, 2)
+    cv2.imwrite(savePath, img)
+    
+    
+def function_blob(imagePath, inputValue, savePath):
+    img = cv2.imread(imagePath, cv2.IMREAD_GRAYSCALE)
+    contours, hier = cv2.findContours(img, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
+    img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+    
+    for contour in contours:
+        contourArea = cv2.contourArea(contour)
+        if contourArea >= inputValue:
+            cv2.drawContours(img, [contour], -1, (36, 255, 12), 1)
+    
+    cv2.imwrite(savePath, img)
+    
+
+def function_blur(imagePath, inputWidthValue, inputHeightValue, inputSigmaValue, savePath):
+    img = cv2.imread(imagePath)
+    img = cv2.GaussianBlur(img, (inputWidthValue, inputHeightValue), inputSigmaValue)
     cv2.imwrite(savePath, img)

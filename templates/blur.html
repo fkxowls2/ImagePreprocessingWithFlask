@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+
+{% block child2 %}
+<p><h2>전처리 : Blur(Gaussian)</h2></p>
+<p>
+    Kernel Width(홀수만): <input type="number" id="widthValue" min="0">&nbsp;
+    Kernel Height(홀수만): <input type="number" id="heightValue" min="0">&nbsp;
+    Sigma Value: <input type="number" id="sigmaValue" min="1">
+    <input type="button" value="실행" onclick="blur_action()">
+    <br><br>
+</p>
+{% endblock %}
+
+{% block script %}
+{% endblock %}
