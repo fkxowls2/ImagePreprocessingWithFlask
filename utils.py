@@ -1,9 +1,6 @@
 import cv2
 import scipy.stats as stats
 import numpy as np
-import matplotlib.pyplot as plt
-from threading import Thread
-import time
 
 
 def function_binary(imagePath, inputValue, savePath):
