@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+
+{% block child2 %}
+<p><h2>전처리 : Canny Edge Detection</h2></p>
+<p>
+    최소값: <input type="number" id="minValue" min="0">&nbsp;
+    최대값: <input type="number" id="maxValue" min="0">&nbsp;
+    <input type="button" value="실행" onclick="canny_action()">
+    <br><br>
+</p>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

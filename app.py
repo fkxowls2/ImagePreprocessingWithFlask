@@ -1,26 +1,29 @@
 from flask import Flask, render_template, request, redirect, send_file
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
+
 import shutil
 import cv2
-from utils import function_binary, function_normalize, function_adthreshold, function_blob, function_blur
+from utils import function_binary, function_normalize, function_adthreshold, function_blob, function_blur, function_canny
 
 
 
 app = Flask(__name__)
 CORS(app)
 
+'''전역 변수 선언'''
 originalSavePath = './static/img/original.png'
 preporcessingInitSavePath = './static/img/init_preprocessing.png'
 preporcessingSavePath = './static/img/preprocessing.png'
 isUpload = False
 
-binaryValue = 127
-normalizeValue = 1
-adThresholdValue = 15
+binaryValue = 0
+normalizeValue = 0
+adThresholdValue = 0
 blobValue = 0
-blurWidthValue, blurHeightValue, blurSigmaValue = 0, 0, 1
-
+blurWidthValue, blurHeightValue, blurSigmaValue = 0, 0, 0
+cannyMinValue, cannyMaxValue = 0, 0
+'''전역 변수 선언'''
 
 
 @app.route('/')
@@ -29,6 +32,8 @@ def index():
     binaryValue, normalizeValue, adThresholdValue, blobValue = 127, 1, 15, 10
     global blurWidthValue, blurHeightValue, blurSigmaValue
     blurWidthValue, blurHeightValue, blurSigmaValue = 0, 0, 1
+    global cannyMinValue, cannyMaxValue
+    cannyMinValue, cannyMaxValue = 32, 128
     
     return render_template('index.html')
 
@@ -41,13 +46,14 @@ def file_upload():
         f.save(originalSavePath)
         shutil.copy(originalSavePath, preporcessingInitSavePath)
         shutil.copy(originalSavePath, preporcessingSavePath)
-        global isUpload; isUpload = True
+        global isUpload
+        isUpload = True
             
     return render_template('upload.html', originalImagePath=originalSavePath)
 
 
-@app.route('/load_original', methods=['POST'])
-def load_original():
+@app.route('/reset_image', methods=['POST'])
+def reset_image():
     _ = str(request.form['value'])
     shutil.copy(originalSavePath, preporcessingInitSavePath)
     shutil.copy(originalSavePath, preporcessingSavePath)
@@ -147,7 +153,25 @@ def action_blur():
     jsonData = request.get_json()
     blurWidthValue, blurHeightValue, blurSigmaValue = int(jsonData['widthValue']), int(jsonData['heightValue']), int(jsonData['sigmaValue'])
     function_blur(preporcessingInitSavePath, blurWidthValue, blurHeightValue, blurSigmaValue, preporcessingSavePath)
-    return ""
+    return "" 
+
+
+@app.route('/make_canny', methods=['GET', 'POST'])
+def make_canny():
+    if isUpload:
+        if request.method == 'POST':
+            shutil.copy(preporcessingSavePath, preporcessingInitSavePath)
+        return render_template('canny.html', originalImagePath=preporcessingInitSavePath, preprocessingImagePath=preporcessingSavePath)    
+    else:
+        return "이미지를 먼저 업로드 해주세요"
+    
+@app.route('/action_canny', methods=['POST'])
+def action_canny():
+    global cannyMinValue, cannyMaxValue
+    jsonData = request.get_json()
+    cannyMinValue, cannyMaxValue = int(jsonData['minValue']), int(jsonData['maxValue'])
+    function_canny(preporcessingInitSavePath, cannyMinValue, cannyMaxValue, preporcessingSavePath)
+    return ""     
     
     
     

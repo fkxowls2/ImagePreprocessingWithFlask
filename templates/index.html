@@ -31,7 +31,7 @@
                     <p><input type="file" name="file" accept="image/*" required></p>
                     <p><input type="submit" value="    입력    "></p>
                 </form>
-                <button onclick="load_original_image()">이미지 리셋</button>
+                <button onclick="image_reset()">이미지 리셋</button>
             </p>
             <p><h2>전처리 기법 선택</h2></p>
             <p>
@@ -62,8 +62,8 @@
                     <button type="submit" value="Button"> 가우시안 블러 </button>
                 </form>
                 &nbsp;
-                <form action="/make_blob" method="POST" style="display:inline">
-                    <button type="submit" value="Button"> 히스토그램작업중 </button>
+                <form action="/make_canny" method="POST" style="display:inline">
+                    <button type="submit" value="Button"> 캐니 엣지 </button>
                 </form>
             </p>
         </div>

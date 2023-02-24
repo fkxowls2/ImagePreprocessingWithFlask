@@ -1,6 +1,9 @@
 import cv2
 import scipy.stats as stats
 import numpy as np
+import matplotlib.pyplot as plt
+from threading import Thread
+import time
 
 
 def function_binary(imagePath, inputValue, savePath):
@@ -40,6 +43,7 @@ def function_blob(imagePath, inputValue, savePath):
     
     for contour in contours:
         contourArea = cv2.contourArea(contour)
+        # 입력한 블랍 사이즈보다 큰 블랍만 그리기
         if contourArea >= inputValue:
             cv2.drawContours(img, [contour], -1, (36, 255, 12), 1)
     
@@ -49,4 +53,10 @@ def function_blob(imagePath, inputValue, savePath):
 def function_blur(imagePath, inputWidthValue, inputHeightValue, inputSigmaValue, savePath):
     img = cv2.imread(imagePath)
     img = cv2.GaussianBlur(img, (inputWidthValue, inputHeightValue), inputSigmaValue)
+    cv2.imwrite(savePath, img)
+    
+
+def function_canny(imagePath, inputMinValue, inputMaxValue, savePath):
+    img = cv2.imread(imagePath)
+    img = cv2.Canny(img, inputMinValue, inputMaxValue)
     cv2.imwrite(savePath, img)
